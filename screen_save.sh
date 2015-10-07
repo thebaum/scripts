@@ -3,13 +3,15 @@ param="$1"
 
 if [ "$param" == "-on" ];
 then
-    xrandr --output DFP10 --rotate left
+    xset s on
+    xset +dpms
     exit
 fi
 
 if [ "$param" == "-off" ];
 then
-    xrandr --output DFP10 --rotate normal
+    xset s off
+    xset -dpms
     exit
 fi
 
