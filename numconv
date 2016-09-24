@@ -1,4 +1,24 @@
 #!/bin/bash
+#
+# shellscript to quickly convert a value/char
+#
+# Usage:
+# numconv [input_format] [value]
+#
+#----------------------------------------------
+# Example:
+# numconv hex FF
+#
+# output:
+# user@earth:~$ numconv dec 90
+# * dec  : 90
+#   oct  : 132
+#   bin  : 1011010
+#   hex  : 5A
+#   ascii: Z
+#----------------------------------------------
+
+
 
 declare -A num_system
 num_system[bin]=2
