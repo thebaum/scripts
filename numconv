@@ -7,9 +7,6 @@
 #
 #----------------------------------------------
 # Example:
-# numconv hex FF
-#
-# output:
 # user@earth:~$ numconv dec 90
 # * dec  : 90
 #   oct  : 132
