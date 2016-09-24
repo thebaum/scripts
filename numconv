@@ -1,0 +1,65 @@
+#!/bin/bash
+
+declare -A num_system
+num_system[bin]=2
+num_system[oct]=8
+num_system[dec]=10
+num_system[hex]=16
+num_system[ascii]=-1
+
+base_current=${num_system[$1]}
+to_convert=$2
+
+ascii_flag=false
+
+#errorhandling for bad input
+if [ -z "$base_current" ] || [ -z "$to_convert" ]; then
+    echo "usage: \"$0 dec 15\", options: ${!num_system[@]}"
+    exit 1
+fi
+
+#convert ascii to decimal
+if [ "$base_current" -eq ${num_system[ascii]} ]; then
+    to_convert=$( printf "%d" "'${to_convert}" )
+    base_current=${num_system[dec]}
+    #set flag to mark ascii as input
+    ascii_flag=true
+fi
+#unset ascii since it's not a real base
+unset num_system[ascii]
+
+#
+# Convert & print in different bases
+#
+
+for i in "${!num_system[@]}"
+do
+    if [ "$ascii_flag" == false ] && [ ${num_system[$i]} == "$base_current" ]; then
+        prefix_curbase="*"
+    else
+        prefix_curbase=" "
+    fi
+
+    result=$(echo "obase=${num_system[$i]}; ibase=$base_current; $to_convert" | bc)
+    #catch potential error
+    if [ -z "$result" ]; then
+        echo "error"
+        exit 1
+    fi
+
+    echo "$prefix_curbase $i  : $result"
+done
+
+#
+# Convert & print as ascii char
+#
+
+#conv hex val to ascii char
+num_ascii=$(echo "obase=${num_system[hex]}; ibase=$base_current; $to_convert" | bc)
+num_ascii=$(echo $num_ascii | xxd -r -p)
+if [ "$ascii_flag" == true ]; then
+    prefix_curbase="*"
+else
+    prefix_curbase=" "
+fi
+echo "$prefix_curbase ascii: $num_ascii"
